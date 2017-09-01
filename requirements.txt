@@ -1,0 +1,10 @@
+mechanize
+urllib2
+urllib
+bs4 
+selenium
+subprocess
+httplib
+requests
+urlparse
+whois
