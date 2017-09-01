@@ -3,4 +3,4 @@ Automation of different phases using python
 
 Works with only python 2.X
 
-pip install -r requirements.txt
+ Use "pip install -r requirements.txt" to install the required modules
