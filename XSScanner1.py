@@ -30,30 +30,53 @@ br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.
        'Connection': 'keep-alive'}'''
 br.set_handle_refresh(False)
 
-def paramfind(ur2):
+def linkcheck(ur2):
     br.open(ur2)
     for l in br.links():
         print l.url
 
+def paramfind(ur3):
+    parsed_url = urlparse.urlparse(ur3)
+    #print parsed_url
+    parsed_url_list = list(parsed_url)
+    #print parsed_url_list   
+    return parsed_url_list
+
+
 ur1 = raw_input("Enter url:")
-parsed_url = urlparse.urlparse(ur1)
-#print parsed_url
-parsed_url_list = list(parsed_url)
-#print parsed_url_list
-parameters = dict(urlparse.parse_qs(parsed_url_list[4]))
+br.open(ur1)
+parsed_url_list1 = paramfind(ur1)
+parameters = dict(urlparse.parse_qs(parsed_url_list1[4]))
+
+
 if parameters =={}:
    print "No parameters in the url.........\n We are finding parameters for u:)" 
-   paramfind(ur1) 
+   #linkcheck(ur1) 
 else:
-    list2 = parsed_url_list[4];
+    list2 = parsed_url_list1;
+    print list2
     #print parameters
-    f=open("list1.txt")
+    
     for i in parameters:
+        k =parameters[i]
         print "Checking the "+ i +" parameter:"
-        r=f.readline()
-        parameters[i] = r        #changing a single parameter
-        parsed_url_list[4] = urlencode(parameters)
-        print urlparse.urlunparse(parsed_url_list)
+        f=open("list1.txt")
+        while True:
+              r=f.readline()
+              if r=="":
+                 break
+              parameters[i] = r        #changing a single parameter
+              parsed_url_list1[4] = urlencode(parameters)
+              x= urlparse.urlunparse(parsed_url_list1)
+              print x
+              res = urllib.urlopen(x)
+              res =res.read()
+              if r in res:
+                 print "Vulnerability found"
+              else:
+                  print"No vulnerability found"
+        parameters[i] =k
+        parsed_url_list1 = list2
     
     #o1 = o._replace(i = "alert(1)")
     #path = o.scheme+"://"+o.netloc+o.path
@@ -69,11 +92,6 @@ print k
 
 f=open("list1.txt")
 
-url = "http://www.zdic.net/search/default.asp"
-zi = { 'eventName' : 'myEvent', 'eventDescription' : 'cool event'}
-search = urllib.urlencode([('q', zi)])
-print search
-
 for i in range(len(k["q"])):
     r=f.readline()
     print r
@@ -83,5 +101,4 @@ for i in range(len(k["q"])):
     print "Response when the above payload is injected is: "
     print res 
 '''
-
 
